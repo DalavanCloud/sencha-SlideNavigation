@@ -297,7 +297,7 @@ Ext.define('Ext.ux.slidenavigation.View', {
             items = Ext.isArray(items) ? items : [items],
             groups = me.config.groups;
         
-        Ext.each(items, function(item, index) {
+        Ext.each(items, function(item, i) {
             if (!Ext.isDefined(item.index)) {
                 item.index = me._indexCount;
                 me._indexCount++;
@@ -312,7 +312,14 @@ Ext.define('Ext.ux.slidenavigation.View', {
      * Removes an array of items (or a single item) from the list.
      */
     removeItems: function(items) {
-        //
+        var me = this,
+            items = Ext.isArray(items) ? items : [items],
+            groups = me.config.groups;
+
+        Ext.each(items, function(item, i) {
+            me._cache[item.index] = undefined;
+            me.store.remove(item);
+        });
     },
 
     /**
