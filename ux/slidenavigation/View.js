@@ -288,7 +288,7 @@ Ext.define('Ext.ux.slidenavigation.View', {
     },
     
     /**
-     *  @private
+     *  @protected
      *
      *  Adds an array of items (or a single item) into the list.
      */
@@ -304,6 +304,15 @@ Ext.define('Ext.ux.slidenavigation.View', {
             }
             me.store.add(item);
         });
+    },
+
+    /**
+     * @protected
+     *
+     * Removes an array of items (or a single item) from the list.
+     */
+    removeItems: function(items) {
+        //
     },
 
     /**
