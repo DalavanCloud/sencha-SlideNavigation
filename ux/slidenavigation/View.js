@@ -412,6 +412,27 @@ Ext.define('Ext.ux.slidenavigation.View', {
     },
 
     /**
+     * @protected
+     *
+     * Set the selection in the slide navigation view
+     * @param  {Component} container The view which you want to activate
+     * @return {void}
+     */
+    autoSelectView: function(container) {
+        var me = this, item;
+        this.store.each(function(innerItem){
+            if (me._cache[innerItem.raw.index] === container) {
+                item = innerItem;
+            }
+        });
+        if (item) {
+            this.list.select(item);
+        } else {
+            if (Ext.Logger) Ext.Logger.warn("autoSelectView: Given container is not a child of the slide navigation!");
+        }
+    },
+
+    /**
      * @private
      *
      * Always called when item in the list is tapped.
