@@ -275,20 +275,22 @@ Ext.define('Ext.ux.slidenavigation.View', {
         
         var selectedItemIndex = 0;		
 		
-        Ext.each(this.list.getStore().getRange(), function(item, index) {
-            if (item.get('selected') === true) {
-                selectedItemIndex = index;
-            }
-        });
+        if (this.list.getStore().getCount() > 0) {
+            Ext.each(this.list.getStore().getRange(), function(item, index) {
+                if (item.get('selected') === true) {
+                    selectedItemIndex = index;
+                }
+            });
 		
-        this.list.select(selectedItemIndex);
+            this.list.select(selectedItemIndex);
+        }
 
         this.__init = true;
 
     },
     
     /**
-     *  @protected
+     *  @private
      *
      *  Adds an array of items (or a single item) into the list.
      */
@@ -297,28 +299,12 @@ Ext.define('Ext.ux.slidenavigation.View', {
             items = Ext.isArray(items) ? items : [items],
             groups = me.config.groups;
         
-        Ext.each(items, function(item, i) {
+        Ext.each(items, function(item, index) {
             if (!Ext.isDefined(item.index)) {
                 item.index = me._indexCount;
                 me._indexCount++;
             }
             me.store.add(item);
-        });
-    },
-
-    /**
-     * @protected
-     *
-     * Removes an array of items (or a single item) from the list.
-     */
-    removeItems: function(items) {
-        var me = this,
-            items = Ext.isArray(items) ? items : [items],
-            groups = me.config.groups;
-
-        Ext.each(items, function(item, i) {
-            me._cache[item.index] = undefined;
-            me.store.remove(item);
         });
     },
 
@@ -409,27 +395,6 @@ Ext.define('Ext.ux.slidenavigation.View', {
                 el.setMasked(false);
             }
         });
-    },
-
-    /**
-     * @protected
-     *
-     * Set the selection in the slide navigation view
-     * @param  {Component} container The view which you want to activate
-     * @return {void}
-     */
-    autoSelectView: function(container) {
-        var me = this, item;
-        this.store.each(function(innerItem){
-            if (me._cache[innerItem.raw.index] === container) {
-                item = innerItem;
-            }
-        });
-        if (item) {
-            this.list.select(item);
-        } else {
-            if (Ext.Logger) Ext.Logger.warn("autoSelectView: Given container is not a child of the slide navigation!");
-        }
     },
 
     /**
@@ -848,7 +813,6 @@ Ext.define('Ext.ux.slidenavigation.View', {
                                 scrollable              = scrollParent.getScrollable();
                                 scroller                = scrollable.getScroller();
                                 scroller._scrollState   = scroller.getDisabled();
-                                
                                 if (scroller._scrollState != false) {
                                     scroller.setDisabled(true);
                                     scrollable.hideIndicators();
